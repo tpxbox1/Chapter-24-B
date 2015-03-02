@@ -1,0 +1,108 @@
+// ***********************************************
+// Program Abstract
+// This program draws circles(1000) heading in a line in random directions.
+// ***********************************************
+
+// ***********************************************
+// Program Variable Dictionary
+// joe is my circle object
+// addX this is to track if the cirlces are moving left or right
+// addY this is to track if the cirlces are moving up or down
+// rand is my random object
+// incX is the amount that x is increased until it hits a edge then is randomized
+// incY is the amount that y is increased until it hits a edge then is randomized
+// ***********************************************
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+public class ch_24_b {
+	public static void main(String args[])
+	{
+		GfxApp gfx = new GfxApp();
+		gfx.setSize(900,800);
+		gfx.addWindowListener(new WindowAdapter() {public void
+		windowClosing(WindowEvent e) {System.exit(0);}});
+		gfx.show();
+	}
+}
+class GfxApp extends Frame
+{
+	public void paint(Graphics g)
+	{
+		Circle joe = new Circle(30,435,385,10000);
+		for (int i = 0; i <= 1000;i++)
+		{
+			joe.drawCircle(g);
+		}
+	}
+}
+class Circle
+{
+	int topleftX;
+	int topleftY;
+	int incX;
+	int incY;
+	int addX;
+	int addY;
+	int size;
+	double timeDelay;
+	Circle(int siz,int inx,int iny,double timDelay)
+	{
+			size = siz;
+			topleftX = inx;
+			topleftY = iny;
+			timeDelay = timDelay;
+			addX=1;
+			addY=1;
+			newData();
+	}
+	public void drawCircle(Graphics g)
+	{
+			hitEdge(topleftX,topleftY);
+			g.drawOval(topleftX,topleftY,size,size);
+			delay(timeDelay);
+			setTLX(topleftX);
+			setTLY(topleftY);
+	}
+	public void hitEdge(int topleftX,int topleftY)
+	{
+		if (topleftX <= 15)
+		{
+  			addX = 1;
+  			newData();
+		}
+		if (topleftY <= 30)
+		{
+			addY = 1;
+			newData();
+		}
+		if (topleftX >= 850)
+		{
+			addX = -1;
+			newData();
+		}
+		if (topleftY >= 750)
+		{
+			addY = -1;
+			newData();
+		}
+	}
+	private void newData()
+	{
+		Random rand = new Random(System.currentTimeMillis());
+		incX = rand.nextInt(8)+5;
+		incY = rand.nextInt(8)+5;
+	}
+	public void setTLX(int x)
+	{
+		topleftX = x+(incX*addX);
+	}
+	public void setTLY(int y)
+	{
+		topleftY = y+(incY*addY);
+	}
+	private void delay(double n)
+   {
+   	for (double k = 1; k < n; k+=0.001);
+  	}
+}
